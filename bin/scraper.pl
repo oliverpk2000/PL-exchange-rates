@@ -38,7 +38,7 @@ sub main{
         }
 
         if(defined($cells[2])){
-            $inv_one_eur = $cells[1]->look_down('_tag', 'a')->as_text;
+            $inv_one_eur = $cells[2]->look_down('_tag', 'a')->as_text;
         }
 
         my $currency = new Currency($name, $one_eur, $inv_one_eur);
