@@ -1,7 +1,10 @@
+#!/usr/local/bin/perl
+
 use strict;
 use warnings;
 use HTTP::Tiny;
 use HTML::TreeBuilder;
+use DateTime;
 use FindBin;
 use lib "$FindBin::Bin/../lib";
 use currency;
@@ -28,6 +31,7 @@ sub main{
         my $name = "";
         my $one_eur = -1.0;
         my $inv_one_eur = -1.0;
+        my $datetime = DateTime->now;
 
         if(defined($cells[0])){
             $name = $cells[0]->as_text;
@@ -41,10 +45,15 @@ sub main{
             $inv_one_eur = $cells[2]->look_down('_tag', 'a')->as_text;
         }
 
-        my $currency = new Currency($name, $one_eur, $inv_one_eur);
+        my $currency = new Currency($name, $one_eur, $inv_one_eur, $datetime);
 
-        push @currencies, $currency;
-
-        print "$name;$one_eur;$inv_one_eur\n"; 
+        push @currencies, $currency unless ((($name cmp "") == 0) || ($one_eur == -1) || ($inv_one_eur == -1.0));
     }
+
+    for my $curr (@currencies){
+            my $csv_string = $curr->get_as_csv_string;
+
+            print "$csv_string\n";
+        }
+
 }
