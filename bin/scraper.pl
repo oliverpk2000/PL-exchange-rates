@@ -19,15 +19,32 @@ sub main{
 
     my @exchange_rates = $tree->look_down('_tag', 'tr');
 
+    my @currencies;
+
     for my $rate (@exchange_rates) {
 
-        my @data = $rate->look_down('_tag', 'td');
+        my @cells = $rate->look_down('_tag', 'td');
 
-        my $name = $data[0]->as_text;
+        my $name = "";
+        my $one_eur = -1.0;
+        my $inv_one_eur = -1.0;
 
-        my $currency = new Currency("test", 1.0, 1.0);
-        print "$name\n"; 
+        if(defined($cells[0])){
+            $name = $cells[0]->as_text;
+        }
+
+        if(defined($cells[1])){
+            $one_eur = $cells[1]->look_down('_tag', 'a')->as_text;
+        }
+
+        if(defined($cells[2])){
+            $inv_one_eur = $cells[1]->look_down('_tag', 'a')->as_text;
+        }
+
+        my $currency = new Currency($name, $one_eur, $inv_one_eur);
+
+        push @currencies, $currency;
+
+        print "$name;$one_eur;$inv_one_eur\n"; 
     }
-
-    #print "$html_content\n";
 }
