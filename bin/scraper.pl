@@ -50,10 +50,31 @@ sub main{
         push @currencies, $currency unless ((($name cmp "") == 0) || ($one_eur == -1) || ($inv_one_eur == -1.0));
     }
 
-    for my $curr (@currencies){
-            my $csv_string = $curr->get_as_csv_string;
+    my @data = @currencies;
+    
+    mkdir "data" unless(-d "data" );
 
-            print "$csv_string\n";
-        }
+    #if data.csv doesn't exist, create it, otherwise append the data
+    unless(-e "data/data.csv"){
+        my $file;
+        open($file, ">data/data.csv")||die("Cannot open file:".$!);
+
+        print $file "name;one_eur;inv_one_eur;timestamp;\n";
+
+        close($file);
+    }
+    
+    my $file;
+
+
+    open $file, '>>:encoding(utf8)', 'data/data.csv' or die "cannot append to file /data.csv $!";        
+
+    foreach my $currency_data (@data) {
+        my $row = $currency_data->get_as_csv_string;
+        print $file "$row\n";
+    }
+    close $file;
+
+    return 0;
 
 }
