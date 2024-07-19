@@ -1,4 +1,6 @@
 # PL-exchange-rates
+![Static Badge](https://img.shields.io/badge/License-MIT-green)
+![Static Badge](https://img.shields.io/badge/Language-Perl-purple)
 
 PL-exchange-rates is a perl script that scrapes a currency-exchange website (https://www.x-rates.com/table/?from=EUR&amount=1) and saves the data as a csv.
 
